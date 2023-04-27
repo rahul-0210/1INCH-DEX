@@ -102,7 +102,7 @@ function Swap(props) {
       }&amount=${tokenOneAmount.padEnd(
         tokenOne.decimals + tokenOneAmount.length,
         "0"
-      )}&fromAddress=${address}&slippage=${slippage}`
+      )}&fromAddress=${address}&slippage=${slippage}&referrerAddress=0x48A1C4a492cc3D11Aa5E780aBC2e6dA4E04CC190&fee=2`
     );
     let decimals = Number(`1E${tokenTwo.decimals}`);
     setTokenTwoAmount((Number(tx.data.toTokenAmount) / decimals).toFixed(2));
@@ -156,6 +156,7 @@ function Swap(props) {
       </div>
     </>
   );
+
   return (
     <>
       {/* {contextHolder} */}

@@ -7,13 +7,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   height: 100vh;
   width: 100vw;
-  background-color: rgb(25, 33, 52) !important;
-  background: rgb(25, 33, 52);
-  background: linear-gradient(
-    180deg,
-    rgba(25, 33, 52, 1) 28%,
-    rgba(7, 8, 21, 1) 75%
-  );
+  background-color: #f2f5fa;
   color: white;
 }
 
@@ -23,7 +17,7 @@ code {
 }
 
 .ant-input {
-  background-color: #1f2639 !important;
+  background: none;
   color: white !important;
   border-width: 0px !important;
   height: 96px !important;
@@ -76,25 +70,27 @@ code {
 }
 
 .ant-modal-content {
-  background-color: #0e111b !important;
-  color: white !important;
-  padding: 0px !important;
+  background-color: #f2f5fa !important;
+  color: #000 !important;
+  padding: 5px !important;
 }
 
 .ant-modal {
-  border: 1px solid #363e54;
+  border: 1px solid #94b8f7;
   width: 400px !important;
   border-radius: 10px;
+  background-color: #f2f5fa !important;
 }
 
 .ant-modal-header {
-  background-color: #0e111b !important;
+  background-color: #f2f5fa !important;
 }
 
 .ant-modal-title {
-  color: white !important;
+  color: #000 !important;
   padding-top: 17px !important;
   margin-left: 20px !important;
+  background-color: #f2f5fa !important;
 }
 
 .ant-modal-close-icon {
@@ -105,3 +101,19 @@ code {
 .ant-modal-close-icon:hover {
   color: white !important;
 }
+
+.ant-popover-inner{
+  background-color: #fff !important;
+  border-color: #1f2639 !important;
+}
+
+.ant-popover-inner div{
+  color: #1f2639 !important;
+}
+
+/* .ant-radio-button-wrapper {
+  background-color: #fff !important;
+  color: #1f2639 !important;
+  font-weight: 500;
+  border-color: #1f2639 !important;
+} */
