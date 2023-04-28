@@ -3,6 +3,7 @@ import { Input, Popover, Radio, Modal, message } from "antd";
 import { ArrowDownOutlined, DownOutlined, SettingOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { useSendTransaction, useWaitForTransaction } from "wagmi";
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Moralis from "moralis";
 // import tokenList from "../tokenList.json";
 
@@ -81,11 +82,11 @@ function Swap(props) {
   async function fetchPrices(one, two) {
     const responseOne = await Moralis.EvmApi.token.getTokenPrice({
       address: one,
-      chain: `0x${chain.id.toString(16)}`
+      chain: `0x${chain?.id.toString(16)}`
     });
     const responseTwo = await Moralis.EvmApi.token.getTokenPrice({
       address: two,
-      chain: `0x${chain.id.toString(16)}`
+      chain: `0x${chain?.id.toString(16)}`
     });
     const usdPrices = {
       tokenOne: responseOne.raw.usdPrice,
@@ -99,18 +100,18 @@ function Swap(props) {
 
   async function fetchDexSwap() {
     const allowance = await axios.get(
-      `https://api.1inch.io/v5.0/${chain.id}/approve/allowance?tokenAddress=${tokenOne.address}&walletAddress=${address}`
+      `https://api.1inch.io/v5.0/${chain?.id}/approve/allowance?tokenAddress=${tokenOne.address}&walletAddress=${address}`
     );
 
     if (allowance.data.allowance === "0") {
       const approve = await axios.get(
-        `https://api.1inch.io/v5.0/${chain.id}/approve/transaction?tokenAddress=${tokenOne.address}`
+        `https://api.1inch.io/v5.0/${chain?.id}/approve/transaction?tokenAddress=${tokenOne.address}`
       );
       setTxDetails(approve.data);
       return;
     }
     const tx = await axios.get(
-      `https://api.1inch.io/v5.0/${chain.id}/swap?fromTokenAddress=${tokenOne.address}&toTokenAddress=${tokenTwo.address
+      `https://api.1inch.io/v5.0/${chain?.id}/swap?fromTokenAddress=${tokenOne.address}&toTokenAddress=${tokenTwo.address
       }&amount=${tokenOneAmount.padEnd(
         tokenOne.decimals + tokenOneAmount.length,
         "0"
@@ -170,8 +171,8 @@ function Swap(props) {
 
   useEffect(() => {
     const fetchTokenList = async () => {
-      const { data } = await axios.get(`https://api.1inch.io/v5.0/${chain.id}/tokens`);
-      if (chain.id === 1) {
+      const { data } = await axios.get(`https://api.1inch.io/v5.0/${chain?.id}/tokens`);
+      if (chain?.id === 1) {
         const tokenData = {
           "0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577": {
             address: "0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577",
@@ -182,7 +183,7 @@ function Swap(props) {
           }
         }
         setTokenList({ ...tokenData, ...data.tokens })
-      } else if (chain.id === 137) {
+      } else if (chain?.id === 137) {
         const tokenData = {
           "0x7e7ff932fab08a0af569f93ce65e7b8b23698ad8": {
             address: "0x7e7ff932fab08a0af569f93ce65e7b8b23698ad8",
@@ -201,14 +202,17 @@ function Swap(props) {
         }
         setTokenList({ ...tokenData, ...data.tokens })
       } else setTokenList(data.tokens)
-      const tokenOne = data.tokens[Object.keys(data.tokens)[0]]
-      const tokenTwo = data.tokens[Object.keys(data.tokens)[1]]
+      const tokenOne = data.tokens[Object.keys(data.tokens)[1]]
+      const tokenTwo = data.tokens[Object.keys(data.tokens)[2]]
       setTokenOne(tokenOne)
       setTokenTwo(tokenTwo)
+      setPrices(null);
+      setTokenOneAmount(null);
+      setTokenTwoAmount(null);
       fetchPrices(tokenOne.address, tokenTwo.address);
     }
     fetchTokenList()
-  }, [chain.id])
+  }, [chain?.id])
 
   const settings = (
     <>
@@ -242,33 +246,40 @@ function Swap(props) {
         </div>
       </Modal>
       <div className="tradeBox">
-        <div className="tradeBoxHeader">
-          <h4>Swap</h4>
-          <Popover content={settings} title="Settings" trigger="click" placement="bottomRight">
-            <SettingOutlined className="cog" />
-          </Popover>
+        {!isConnected ? <div className="m-auto d-flex flex-column align-items-center justify-content-center">
+          <h2 className="text-dark m-auto pb-2">Connect wallet</h2>
+          <p className="text-secondary m-auto pb-3">Connect wallet to interact with dex</p>
+          <ConnectButton/>
         </div>
+          : <div>
+            <div className="tradeBoxHeader">
+              <h4>Swap</h4>
+              <Popover content={settings} title="Settings" trigger="click" placement="bottomRight">
+                <SettingOutlined className="cog" />
+              </Popover>
+            </div>
 
-        <div className="inputs">
-          <Input placeholder="0" value={tokenOneAmount} onChange={changeAmount} disabled={!prices} />
-          <Input placeholder="0" value={tokenTwoAmount} disabled={true} />
-          <div className="switchButton" onClick={switchTokens}>
-            <ArrowDownOutlined className="switchArrow" />
-          </div>
-          <div className="assetOne" onClick={() => openModal(1)}>
-            {tokenOne.logoURI ? <img src={tokenOne?.logoURI} alt="icon" className="assetLogo" /> : "Token 1"}
-            {tokenOne?.symbol}
-            <DownOutlined />
-          </div>
-          <div className="assetTwo" onClick={() => openModal(2)}>
-            {tokenTwo.logoURI ? <img src={tokenTwo?.logoURI} alt="icon" className="assetLogo" /> : "Token 2"}
-            {tokenTwo?.symbol}
-            <DownOutlined />
-          </div>
-        </div>
-        <div className="swapButton" disabled={!tokenOneAmount || !isConnected} onClick={fetchDexSwap}>
-          Swap
-        </div>
+            <div className="inputs">
+              <Input placeholder="0" value={tokenOneAmount} onChange={changeAmount} disabled={!prices} />
+              <Input placeholder="0" value={tokenTwoAmount} disabled={true} />
+              <div className="switchButton" onClick={switchTokens}>
+                <ArrowDownOutlined className="switchArrow" />
+              </div>
+              <div className="assetOne" onClick={() => openModal(1)}>
+                {tokenOne.logoURI ? <img src={tokenOne?.logoURI} alt="icon" className="assetLogo" /> : "Token 1"}
+                {tokenOne?.symbol}
+                <DownOutlined />
+              </div>
+              <div className="assetTwo" onClick={() => openModal(2)}>
+                {tokenTwo.logoURI ? <img src={tokenTwo?.logoURI} alt="icon" className="assetLogo" /> : "Token 2"}
+                {tokenTwo?.symbol}
+                <DownOutlined />
+              </div>
+            </div>
+            <div className="swapButton" disabled={!tokenOneAmount || !isConnected} onClick={fetchDexSwap}>
+              Swap
+            </div>
+          </div>}
       </div>
     </>
   );

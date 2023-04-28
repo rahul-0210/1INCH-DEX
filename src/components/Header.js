@@ -4,8 +4,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 // import Logo from "../moralis-logo.svg";
 import Logo from "../assets/Logo.png"
 
-function Header(props) {
-  const { address, isConnected, connect, chain } = props;
+function Header() {
   return (
     <header>
       <div className="leftH">
