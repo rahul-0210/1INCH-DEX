@@ -89,5 +89,19 @@
     "name": "AAVE",
     "address": "0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9",
     "decimals": 18
+  },
+  {
+    "ticker": "YF-DAI",
+    "img": "https://cdn.moralis.io/eth/0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577.png",
+    "name": "YfDAI.finance",
+    "address": "0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577",
+    "decimals": 18
+  },
+  {
+    "ticker": "SSGTX",
+    "img": "https://assets.coingecko.com/coins/images/20769/small/GBpj6TpI.png?1638362807",
+    "name": "Safeswap SSGTX",
+    "address": "0xd0cfd20e8bbdb7621b705a4fd61de2e80c2cd02f",
+    "decimals": 18
   }
 ]

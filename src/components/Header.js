@@ -26,10 +26,6 @@ function Header(props) {
             largeScreen: 'full',
           }}
         />
-          {/* <div className="headerItem">{chain}</div>
-        <div className="connectButton" onClick={connect}>
-          {isConnected ? address.slice(0, 6) + "..." + address.slice(38) : "Connect Wallet"}
-        </div> */}
       </div>
     </header>
   );

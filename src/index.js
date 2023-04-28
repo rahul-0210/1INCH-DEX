@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import 'bootstrap/dist/css/bootstrap.css';
 import "./index.css";
 import App from "./App";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 
 import '@rainbow-me/rainbowkit/styles.css';
 import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
@@ -33,29 +33,30 @@ import {
 const { provider, webSocketProvider, chains } = configureChains(
   [
     avalanche,
-    avalancheFuji,
+    // avalancheFuji,
     bsc,
-    bscTestnet,
+    // bscTestnet,
     fantom,
-    fantomTestnet,
+    // fantomTestnet,
     foundry,
     gnosis,
-    goerli,
+    // goerli,
     mainnet,
     optimism,
-    optimismGoerli,
+    // optimismGoerli,
     polygon,
-    polygonMumbai,
+    // polygonMumbai,
     zkSync,
-    zkSyncTestnet,
+    // zkSyncTestnet,
     arbitrum,
-    arbitrumGoerli,
+    // arbitrumGoerli,
   ],
   [publicProvider()]
 );
+
 const { connectors } = getDefaultWallets({
   appName: 'YFDAI DEX',
-  projectId: '159a7abe6c747e2f272f14540ad0b50d',
+  projectId: process.env.REACT_APP_RAINBOW_ID,
   chains
 });
 
@@ -70,11 +71,11 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <WagmiConfig client={client}>
-      <BrowserRouter>
-    <RainbowKitProvider modalSize="compact" chains={chains}>
-        <App />
-      </RainbowKitProvider>
-      </BrowserRouter>
+      <HashRouter>
+        <RainbowKitProvider modalSize="compact" chains={chains}>
+          <App/>
+        </RainbowKitProvider>
+      </HashRouter>
     </WagmiConfig>
   </React.StrictMode>
 );

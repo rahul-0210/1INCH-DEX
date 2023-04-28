@@ -17,8 +17,8 @@ code {
 }
 
 .ant-input {
-  background: none;
-  color: white !important;
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #5f6783 !important;
   border-width: 0px !important;
   height: 96px !important;
   margin-bottom: 5px;

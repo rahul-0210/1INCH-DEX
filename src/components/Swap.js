@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Input, Popover, Radio, Modal, message } from "antd";
 import { ArrowDownOutlined, DownOutlined, SettingOutlined } from "@ant-design/icons";
-import tokenList from "../tokenList.json";
 import axios from "axios";
 import { useSendTransaction, useWaitForTransaction } from "wagmi";
+import Moralis from "moralis";
+// import tokenList from "../tokenList.json";
 
 function Swap(props) {
-  const { address, isConnected } = props;
-
+  const { address, isConnected, chain } = props;
   const [tokenOneAmount, setTokenOneAmount] = useState(null);
   const [tokenTwoAmount, setTokenTwoAmount] = useState(null);
-  const [tokenOne, setTokenOne] = useState(tokenList[0]);
-  const [tokenTwo, setTokenTwo] = useState(tokenList[1]);
+  const [tokenList, setTokenList] = useState([])
+  const [tokenOne, setTokenOne] = useState({});
+  const [tokenTwo, setTokenTwo] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [changeToken, setChangeToken] = useState(1);
   const [slippage, setSlippage] = useState(2.5);
@@ -38,6 +39,7 @@ function Swap(props) {
   }
 
   function changeAmount(e) {
+    if (isNaN(e.target.value)) return;
     setTokenOneAmount(e.target.value);
     if (e.target.value && prices) {
       setTokenTwoAmount((e.target.value * prices.ratio).toFixed(2));
@@ -45,6 +47,7 @@ function Swap(props) {
       setTokenTwoAmount(null);
     }
   }
+
   function switchTokens() {
     setPrices(null);
     setTokenOneAmount(null);
@@ -60,45 +63,54 @@ function Swap(props) {
     setChangeToken(asset);
     setIsOpen(true);
   }
-  function modifyToken(i) {
+
+  function modifyToken(key) {
     setPrices(null);
     setTokenOneAmount(null);
     setTokenTwoAmount(null);
     if (changeToken === 1) {
-      setTokenOne(tokenList[i]);
-      fetchPrices(tokenList[i].address, tokenTwo.address);
+      setTokenOne(tokenList[key]);
+      fetchPrices(tokenList[key]?.address, tokenTwo.address);
     } else {
-      setTokenTwo(tokenList[i]);
-      fetchPrices(tokenOne.address, tokenList[i].address);
+      setTokenTwo(tokenList[key]);
+      fetchPrices(tokenOne.address, tokenList[key]?.address);
     }
     setIsOpen(false);
   }
 
   async function fetchPrices(one, two) {
-    const res = await axios.get(`http://localhost:3001/tokenPrice`, {
-      params: { addressOne: one, addressTwo: two },
+    const responseOne = await Moralis.EvmApi.token.getTokenPrice({
+      address: one,
+      chain: `0x${chain.id.toString(16)}`
     });
-
-    setPrices(res.data);
+    const responseTwo = await Moralis.EvmApi.token.getTokenPrice({
+      address: two,
+      chain: `0x${chain.id.toString(16)}`
+    });
+    const usdPrices = {
+      tokenOne: responseOne.raw.usdPrice,
+      tokenTwo: responseTwo.raw.usdPrice,
+      ratio: responseOne.raw.usdPrice / responseTwo.raw.usdPrice,
+    };
+    setPrices(usdPrices);
   }
+
+  // 0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9
 
   async function fetchDexSwap() {
     const allowance = await axios.get(
-      `https://api.1inch.io/v5.0/42161/approve/allowance?tokenAddress=0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9&walletAddress=${address}`
+      `https://api.1inch.io/v5.0/${chain.id}/approve/allowance?tokenAddress=${tokenOne.address}&walletAddress=${address}`
     );
-    console.log("allowance: ", allowance);
 
     if (allowance.data.allowance === "0") {
       const approve = await axios.get(
-        `https://api.1inch.io/v5.0/42161/approve/transaction?tokenAddress=0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9`
+        `https://api.1inch.io/v5.0/${chain.id}/approve/transaction?tokenAddress=${tokenOne.address}`
       );
       setTxDetails(approve.data);
-      console.log("not approved");
       return;
     }
     const tx = await axios.get(
-      `https://api.1inch.io/v5.0/42161/swap?fromTokenAddress=0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9&toTokenAddress=${
-        tokenTwo.address
+      `https://api.1inch.io/v5.0/${chain.id}/swap?fromTokenAddress=${tokenOne.address}&toTokenAddress=${tokenTwo.address
       }&amount=${tokenOneAmount.padEnd(
         tokenOne.decimals + tokenOneAmount.length,
         "0"
@@ -109,14 +121,16 @@ function Swap(props) {
     setTxDetails(tx.data.tx);
   }
 
-  useEffect(() => {
-    fetchPrices(tokenList[0].address, tokenList[1].address);
-  }, []);
+  // useEffect(() => {
+  //   fetchPrices(tokenList?.[0]?.address, tokenList?.[1]?.address);
+  // }, []);
+
   useEffect(() => {
     if (txDetails.to && isConnected) {
       sendTransaction();
     }
   }, [txDetails]);
+
   useEffect(() => {
     message.destroy();
     if (isLoading) {
@@ -127,6 +141,7 @@ function Swap(props) {
       });
     }
   }, [isLoading]);
+
   useEffect(() => {
     message.destroy();
     if (isSuccess) {
@@ -143,6 +158,57 @@ function Swap(props) {
       });
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    const startMoralis = async () => {
+      await Moralis.start({
+        apiKey: process.env.REACT_APP_MORALIS_KEY,
+      });
+    }
+    startMoralis()
+  }, [])
+
+  useEffect(() => {
+    const fetchTokenList = async () => {
+      const { data } = await axios.get(`https://api.1inch.io/v5.0/${chain.id}/tokens`);
+      if (chain.id === 1) {
+        const tokenData = {
+          "0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577": {
+            address: "0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577",
+            decimals: 18,
+            logoURI: "https://tokens.1inch.io/0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577.png",
+            name: "YfDAI.finance",
+            symbol: "YF-DAI"
+          }
+        }
+        setTokenList({ ...tokenData, ...data.tokens })
+      } else if (chain.id === 137) {
+        const tokenData = {
+          "0x7e7ff932fab08a0af569f93ce65e7b8b23698ad8": {
+            address: "0x7e7ff932fab08a0af569f93ce65e7b8b23698ad8",
+            decimals: 18,
+            logoURI: "https://tokens.1inch.io/0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577.png",
+            name: "YfDAI.finance",
+            symbol: "YF-DAI"
+          },
+          "0xd0cfd20e8bbdb7621b705a4fd61de2e80c2cd02f": {
+            address: "0xd0cfd20e8bbdb7621b705a4fd61de2e80c2cd02f",
+            decimals: 18,
+            logoURI: "https://assets.coingecko.com/coins/images/20769/small/GBpj6TpI.png?1638362807",
+            name: "Safeswap SSGTX",
+            symbol: "SSGTX"
+          }
+        }
+        setTokenList({ ...tokenData, ...data.tokens })
+      } else setTokenList(data.tokens)
+      const tokenOne = data.tokens[Object.keys(data.tokens)[0]]
+      const tokenTwo = data.tokens[Object.keys(data.tokens)[1]]
+      setTokenOne(tokenOne)
+      setTokenTwo(tokenTwo)
+      fetchPrices(tokenOne.address, tokenTwo.address);
+    }
+    fetchTokenList()
+  }, [chain.id])
 
   const settings = (
     <>
@@ -162,13 +228,13 @@ function Swap(props) {
       {/* {contextHolder} */}
       <Modal open={isOpen} footer={null} onCancel={() => setIsOpen(false)} title="Select a token">
         <div className="modalContent">
-          {tokenList?.map((e, i) => {
+          {tokenList && Object.keys(tokenList).map((key, i) => {
             return (
-              <div className="tokenChoice" key={i} onClick={() => modifyToken(i)}>
-                <img src={e.img} alt={e.ticker} className="tokenLogo" />
+              <div className="tokenChoice" key={i} onClick={() => modifyToken(key)}>
+                <img src={tokenList[key].logoURI} alt={tokenList[key].symbol} className="tokenLogo" />
                 <div className="tokenChoiceNames">
-                  <div className="tokenName">{e.name}</div>
-                  <div className="tokenTicker">{e.ticker}</div>
+                  <div className="tokenName">{tokenList[key].name}</div>
+                  <div className="tokenTicker">{tokenList[key].symbol}</div>
                 </div>
               </div>
             );
@@ -190,13 +256,13 @@ function Swap(props) {
             <ArrowDownOutlined className="switchArrow" />
           </div>
           <div className="assetOne" onClick={() => openModal(1)}>
-            <img src={tokenOne.img} alt="assetOneLogo" className="assetLogo" />
-            {tokenOne.ticker}
+            {tokenOne.logoURI ? <img src={tokenOne?.logoURI} alt="icon" className="assetLogo" /> : "Token 1"}
+            {tokenOne?.symbol}
             <DownOutlined />
           </div>
           <div className="assetTwo" onClick={() => openModal(2)}>
-            <img src={tokenTwo.img} alt="assetOneLogo" className="assetLogo" />
-            {tokenTwo.ticker}
+            {tokenTwo.logoURI ? <img src={tokenTwo?.logoURI} alt="icon" className="assetLogo" /> : "Token 2"}
+            {tokenTwo?.symbol}
             <DownOutlined />
           </div>
         </div>
