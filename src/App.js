@@ -13,12 +13,13 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <div className="mainWindow">
-        {WHITELISTED_USERS.indexOf(address) === -1 ? (
-          <div className="tradeBox mt-5 ">
-            <h4 className="text-dark m-auto pb-2">
-              Only whitelisted users allowed.
-            </h4>
+      <div className="mainWindow d-flex">
+        {address && WHITELISTED_USERS.indexOf(address) === -1 ? (
+          <div className="tradeBox mt-5 text-dark">
+            <div className="m-auto">
+              <h4>Your wallet is not allowed.</h4>
+              <p>Please reach out to community admins.</p>
+            </div>
           </div>
         ) : (
           <Routes>
