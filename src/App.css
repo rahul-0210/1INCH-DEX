@@ -157,6 +157,40 @@ header {
   position: relative;
 }
 
+.token1Bal {
+  position: absolute;
+  min-width: 50px;
+  height: 30px;
+  top: 65px;
+  right: 25px;
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+  gap: 5px;
+}
+
+.token2Bal {
+  position: absolute;
+  min-width: 50px;
+  height: 30px;
+  top: 170px;
+  right: 25px;
+  gap: 5px;
+}
+
+.maxBtn {
+  border: 1px solid #6c86ad;
+  cursor: pointer;
+}
+
+.txtColor {
+  color:#6c86ad;
+}
+
+.txtSize {
+  font-size: 12px;
+}
+
 .assetOne {
   position: absolute;
   min-width: 50px;

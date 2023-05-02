@@ -1,7 +1,7 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
-import Swap from "./components/Swap";
+import Swap from "./components/SwapV2";
 import Tokens from "./components/Tokens";
 import { useConnect, useAccount, useNetwork, useDisconnect } from "wagmi";
 import { WHITELISTED_USERS } from "./common.service";
