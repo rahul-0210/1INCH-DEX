@@ -9,20 +9,23 @@ import axios from "axios";
 import { useSendTransaction, useWaitForTransaction } from "wagmi";
 import ConnectWallet from "./ConnectWallet";
 import { useBalance  } from 'wagmi'
-import { BASE_URL, DEX_FEE, ETHEREUM_DATA, POLYGON_DATA, REFERRER_ADDRESS } from "../common.service";
+import { BASE_URL, DEX_FEE, ETHEREUM_DATA, POLYGON_DATA, ARBITRUM_DATA, REFERRER_ADDRESS } from "../common.service";
 
 function Swap(props) {
   const { address, isConnected, chain } = props;
   const [tokenOneAmount, setTokenOneAmount] = useState(null);
   const [tokenTwoAmount, setTokenTwoAmount] = useState(null);
-  const [tokenList, setTokenList] = useState([]);
+  const [tokenList, setTokenList] = useState({});
+  const [filteredTokenList, setFilteredTokenList] = useState({});
   const [tokenOne, setTokenOne] = useState({});
   const [tokenTwo, setTokenTwo] = useState({});
   const [isOpen, setIsOpen] = useState(false);
   const [debounce, setDebounce] = useState(tokenOneAmount);
   const [changeToken, setChangeToken] = useState(1);
   const [slippage, setSlippage] = useState(2.5);
-  const [tokenValue, setTokenValue] = useState(null)
+  const [tokenValue, setTokenValue] = useState(null);
+  const [search, setSearch] = useState("");
+  const [debounceSearch, setDebounceSearch] = useState(search);
   const [txDetails, setTxDetails] = useState({
     to: null,
     data: null,
@@ -144,6 +147,7 @@ useEffect(() => {
     );
     if (chain?.id === 1) setTokenList({ ...ETHEREUM_DATA, ...data.tokens });
     else if (chain?.id === 137) setTokenList({ ...POLYGON_DATA, ...data.tokens });
+    else if (chain?.id === 42161) setTokenList({ ...ARBITRUM_DATA, ...data.tokens });
     else setTokenList(data.tokens);
     const tokenOne = data.tokens[Object.keys(data.tokens)[1]];
     const tokenTwo = data.tokens[Object.keys(data.tokens)[2]];
@@ -154,6 +158,18 @@ useEffect(() => {
   };
   chain?.id && fetchTokenList();
 }, [chain?.id]);
+
+useEffect(() => {
+  let filteredTokenList = {}
+  if(Object.keys(tokenList).length > 0){
+    for(let key in tokenList){
+      if(search && (tokenList[key]["address"].toLowerCase().includes(debounceSearch.toLowerCase()) || tokenList[key]["name"].toLowerCase().includes(debounceSearch.toLowerCase()) || tokenList[key]["symbol"].toLowerCase().includes(debounceSearch.toLowerCase()))){
+        filteredTokenList[key] = tokenList[key]
+      }
+    }
+    setFilteredTokenList(filteredTokenList)
+  }
+},[debounceSearch])
 
   useEffect(() => {
     if (txDetails.to && isConnected) {
@@ -189,6 +205,16 @@ useEffect(() => {
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebounceSearch(search);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [search]);
+
   const settings = (
     <>
       <div>Slippage Tolerance</div>
@@ -211,8 +237,9 @@ useEffect(() => {
         title="Select a token"
       >
         <div className="modalContent">
-          {tokenList &&
-            Object.keys(tokenList).map((key, i) => {
+          <input placeholder="Search..." value={search} onChange={(e) => setSearch(e.target.value)} className="form-control form-control-lg mt-2" />
+          {Object.keys(debounceSearch ? filteredTokenList : tokenList).length > 0 ?
+            Object.keys(debounceSearch ? filteredTokenList : tokenList).map((key, i) => {
               return (
                 <div
                   className="tokenChoice"
@@ -230,7 +257,7 @@ useEffect(() => {
                   </div>
                 </div>
               );
-            })}
+            }) : <p className="text-center mt-2">No data found</p>} 
         </div>
       </Modal>
       <div className="tradeBox mt-5">

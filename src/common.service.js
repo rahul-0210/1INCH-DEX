@@ -31,3 +31,13 @@ export const ETHEREUM_DATA = {
     symbol: "YF-DAI",
   },
 };
+export const ARBITRUM_DATA = {
+  "0xf061956612b3dc79Fd285D3D51Bc128F2ea87740": {
+    address: "0xf061956612b3dc79Fd285D3D51Bc128F2ea87740",
+    decimals: 18,
+    logoURI:
+      "https://tokens.1inch.io/0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577.png",
+    name: "YfDAI.finance",
+    symbol: "YF-DAI",
+  },
+};
