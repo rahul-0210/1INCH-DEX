@@ -75,6 +75,11 @@ function Swap(props) {
     setIsOpen(true);
   }
 
+  const closeModal = () => {
+    setIsOpen(false);
+    setSearch("")
+  }
+
   const modifyToken = (key) => {
     setTokenOneAmount("1");
     setTokenTwoAmount(null);
@@ -84,6 +89,7 @@ function Swap(props) {
       setTokenTwo(tokenList[key]);
     }
     setIsOpen(false);
+    setSearch("")
   }
 
   const fetchPrices = async(amount, one, two, fee) => {
@@ -233,7 +239,7 @@ useEffect(() => {
       <Modal
         open={isOpen}
         footer={null}
-        onCancel={() => setIsOpen(false)}
+        onCancel={closeModal}
         title="Select a token"
       >
         <div className="modalContent">
