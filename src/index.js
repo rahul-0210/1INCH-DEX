@@ -29,6 +29,7 @@ import {
   zkSync,
   zkSyncTestnet,
 } from "wagmi/chains";
+import { RAINBOW_ID } from "./common.service";
 
 const { provider, webSocketProvider, chains } = configureChains(
   [
@@ -56,7 +57,7 @@ const { provider, webSocketProvider, chains } = configureChains(
 
 const { connectors } = getDefaultWallets({
   appName: 'YFDAI DEX',
-  projectId: process.env.REACT_APP_RAINBOW_ID,
+  projectId: RAINBOW_ID,
   chains
 });
 

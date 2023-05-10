@@ -88,7 +88,7 @@ header {
 }
 
 .tradeBox {
-  width: 400px;
+  width: 450px;
   background-color: #fff;
   border: 2px solid #94b8f7;
   min-height: 300px;
@@ -133,7 +133,7 @@ header {
   border-radius: 8px;
   position: absolute;
   top: 86px;
-  left: 150px;
+  left: 175px;
   color: #5F6783;
   border: 2px solid #94b8f7;
   font-size: 12px;

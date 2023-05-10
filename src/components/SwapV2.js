@@ -9,6 +9,7 @@ import axios from "axios";
 import { useSendTransaction, useWaitForTransaction } from "wagmi";
 import ConnectWallet from "./ConnectWallet";
 import { useBalance  } from 'wagmi'
+import { BASE_URL, DEX_FEE, ETHEREUM_DATA, POLYGON_DATA, REFERRER_ADDRESS } from "../common.service";
 
 function Swap(props) {
   const { address, isConnected, chain } = props;
@@ -48,17 +49,16 @@ function Swap(props) {
   const { isLoading, isSuccess } = useWaitForTransaction({
     hash: data?.hash,
   });
-  function handleSlippageChange(e) {
-    setSlippage(e.target.value);
-  }
 
-  function changeAmount(e) {
+  const handleSlippageChange = (e) => setSlippage(e.target.value);
+
+  const changeAmount = (e) => {
     const {value} = e.target;
     if (isNaN(value)) return;
     setTokenOneAmount(value);
   }
 
-  function switchTokens() {
+  const switchTokens = () => {
     setTokenOneAmount("1");
     setTokenTwoAmount(null);
     const one = tokenOne;
@@ -67,12 +67,12 @@ function Swap(props) {
     setTokenTwo(one);
   }
 
-  function openModal(asset) {
+  const openModal = (asset) => {
     setChangeToken(asset);
     setIsOpen(true);
   }
 
-  function modifyToken(key) {
+  const modifyToken = (key) => {
     setTokenOneAmount("1");
     setTokenTwoAmount(null);
     if (changeToken === 1) {
@@ -81,6 +81,34 @@ function Swap(props) {
       setTokenTwo(tokenList[key]);
     }
     setIsOpen(false);
+  }
+
+  const fetchPrices = async(amount, one, two, fee) => {
+    const { data } = await axios.get(
+      `${BASE_URL}${chain?.id}/quote?fromTokenAddress=${
+        one.address
+      }&toTokenAddress=${two.address}&amount=${(amount*10**one.decimals).toLocaleString('fullwide', {useGrouping:false})}&fee=${fee}`);
+    return data;
+  }
+
+  const fetchDexSwap = async() => {
+    const allowance = await axios.get(`${BASE_URL}${chain?.id}/approve/allowance?tokenAddress=${tokenOne.address}&walletAddress=${address}`);
+
+    if (allowance.data.allowance === "0") {
+      const approve = await axios.get(
+        `${BASE_URL}${chain?.id}/approve/transaction?tokenAddress=${tokenOne.address}`
+      );
+      setTxDetails(approve.data);
+      return;
+    }
+    const tx = await axios.get(
+      `${BASE_URL}${chain?.id}/swap?fromTokenAddress=${
+        tokenOne.address
+      }&toTokenAddress=${tokenTwo.address}&amount=${(tokenOneAmount*10**18).toLocaleString('fullwide', {useGrouping:false})}&fromAddress=${address}&slippage=${slippage}&referrerAddress=${REFERRER_ADDRESS}&fee=${DEX_FEE}`
+    );
+    // let decimals = Number(`1E${tokenTwo.decimals}`);
+    // setTokenTwoAmount((Number(tx.data.toTokenAmount) / decimals).toFixed(2));
+    setTxDetails(tx.data.tx);
   }
 
   useEffect(() => {
@@ -97,11 +125,11 @@ function Swap(props) {
     if(tokenOne && tokenTwo){
         if(!debounce) setTokenTwoAmount(null);
         else {
-            fetchPrices(tokenOneAmount, tokenOne, tokenTwo).then(data => {
+            fetchPrices(tokenOneAmount, tokenOne, tokenTwo, DEX_FEE).then(data => {
                 const token2Amount = (+data.toTokenAmount/(10**tokenTwo.decimals)).toFixed(5)
                 setTokenTwoAmount(token2Amount)
             })
-            fetchPrices(1, tokenTwo, tokenOne).then(data => {
+            fetchPrices(1, tokenTwo, tokenOne, 0).then(data => {
                 const tokenValue = (+data.toTokenAmount/(10**tokenTwo.decimals)).toFixed(5)
                 setTokenValue(tokenValue)
             })
@@ -109,35 +137,23 @@ function Swap(props) {
     }
 },[debounce, tokenOne, tokenTwo])
 
-  const fetchPrices = async(amount, one, two) => {
+useEffect(() => {
+  const fetchTokenList = async () => {
     const { data } = await axios.get(
-      `https://api.1inch.io/v5.0/${chain?.id}/quote?fromTokenAddress=${
-        one.address
-      }&toTokenAddress=${two.address}&amount=${(amount*10**one.decimals).toLocaleString('fullwide', {useGrouping:false})}&fee=2`);
-      return data;
-    }
-
-  async function fetchDexSwap() {
-    const allowance = await axios.get(
-      `https://api.1inch.io/v5.0/${chain?.id}/approve/allowance?tokenAddress=${tokenOne.address}&walletAddress=${address}`
+      `${BASE_URL}${chain?.id}/tokens`
     );
-
-    if (allowance.data.allowance === "0") {
-      const approve = await axios.get(
-        `https://api.1inch.io/v5.0/${chain?.id}/approve/transaction?tokenAddress=${tokenOne.address}`
-      );
-      setTxDetails(approve.data);
-      return;
-    }
-    const tx = await axios.get(
-      `https://api.1inch.io/v5.0/${chain?.id}/swap?fromTokenAddress=${
-        tokenOne.address
-      }&toTokenAddress=${tokenTwo.address}&amount=${(tokenOneAmount*10**18).toLocaleString('fullwide', {useGrouping:false})}&fromAddress=${address}&slippage=${slippage}&referrerAddress=0x48A1C4a492cc3D11Aa5E780aBC2e6dA4E04CC190&fee=2`
-    );
-    // let decimals = Number(`1E${tokenTwo.decimals}`);
-    // setTokenTwoAmount((Number(tx.data.toTokenAmount) / decimals).toFixed(2));
-    setTxDetails(tx.data.tx);
-  }
+    if (chain?.id === 1) setTokenList({ ...ETHEREUM_DATA, ...data.tokens });
+    else if (chain?.id === 137) setTokenList({ ...POLYGON_DATA, ...data.tokens });
+    else setTokenList(data.tokens);
+    const tokenOne = data.tokens[Object.keys(data.tokens)[1]];
+    const tokenTwo = data.tokens[Object.keys(data.tokens)[2]];
+    setTokenOne(tokenOne);
+    setTokenTwo(tokenTwo);
+    setTokenOneAmount("1");
+    setTokenTwoAmount(null);
+  };
+  chain?.id && fetchTokenList();
+}, [chain?.id]);
 
   useEffect(() => {
     if (txDetails.to && isConnected) {
@@ -173,54 +189,6 @@ function Swap(props) {
     }
   }, [isSuccess]);
 
-  useEffect(() => {
-    const fetchTokenList = async () => {
-      const { data } = await axios.get(
-        `https://api.1inch.io/v5.0/${chain?.id}/tokens`
-      );
-      if (chain?.id === 1) {
-        const tokenData = {
-          "0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577": {
-            address: "0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577",
-            decimals: 18,
-            logoURI:
-              "https://tokens.1inch.io/0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577.png",
-            name: "YfDAI.finance",
-            symbol: "YF-DAI",
-          },
-        };
-        setTokenList({ ...tokenData, ...data.tokens });
-      } else if (chain?.id === 137) {
-        const tokenData = {
-          "0x7e7ff932fab08a0af569f93ce65e7b8b23698ad8": {
-            address: "0x7e7ff932fab08a0af569f93ce65e7b8b23698ad8",
-            decimals: 18,
-            logoURI:
-              "https://tokens.1inch.io/0xf4cd3d3fda8d7fd6c5a500203e38640a70bf9577.png",
-            name: "YfDAI.finance",
-            symbol: "YF-DAI",
-          },
-          "0xd0cfd20e8bbdb7621b705a4fd61de2e80c2cd02f": {
-            address: "0xd0cfd20e8bbdb7621b705a4fd61de2e80c2cd02f",
-            decimals: 18,
-            logoURI:
-              "https://assets.coingecko.com/coins/images/20769/small/GBpj6TpI.png?1638362807",
-            name: "Safeswap SSGTX",
-            symbol: "SSGTX",
-          },
-        };
-        setTokenList({ ...tokenData, ...data.tokens });
-      } else setTokenList(data.tokens);
-      const tokenOne = data.tokens[Object.keys(data.tokens)[1]];
-      const tokenTwo = data.tokens[Object.keys(data.tokens)[2]];
-      setTokenOne(tokenOne);
-      setTokenTwo(tokenTwo);
-      setTokenOneAmount("1");
-      setTokenTwoAmount(null);
-    };
-    chain?.id && fetchTokenList();
-  }, [chain?.id]);
-
   const settings = (
     <>
       <div>Slippage Tolerance</div>
@@ -236,7 +204,6 @@ function Swap(props) {
 
   return (
     <>
-      {/* {contextHolder} */}
       <Modal
         open={isOpen}
         footer={null}
@@ -329,7 +296,7 @@ function Swap(props) {
               </div>
             </div>
             <div>
-                <p className="txtColor txtSize mb-0">1 {tokenTwo.symbol} = {tokenValue} {tokenOne.symbol}</p>
+                <p className="txtColor txtSize mb-0 mt-1">1 {tokenTwo.symbol} = {tokenValue} {tokenOne.symbol}</p>
             </div>
             <div
               className="swapButton"
