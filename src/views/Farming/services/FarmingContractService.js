@@ -7,48 +7,48 @@ export const farmingContract = (contractAddress, abi) => {
 };
 
 export const poolLength = (contractAddress, abi) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "poolLength",
+  functionName: "poolLength",
 });
 
 export const poolInfo = (contractAddress, abi, poolId) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "poolInfo",
+  functionName: "poolInfo",
   args: [poolId],
 });
 
 export const userInfo = (contractAddress, abi, poolId, userAddress) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "userInfo",
+  functionName: "userInfo",
   args: [poolId, userAddress],
 });
 
 export const pendingReward = (contractAddress, abi, poolId, userAddress) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "pendingTokens", //based on development testing contract
+  functionName: "pendingTokens", //based on development testing contract
   args: [poolId, userAddress],
 });
 
 export const totalAllocPoint = (contractAddress, abi) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "totalAllocPoint",
+  functionName: "totalAllocPoint",
 });
 
 export const contractOwner = (contractAddress, abi) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "owner",
+  functionName: "owner",
 });
 
 export const tokenPerBlock = (contractAddress, abi) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "aifinPerBlock",
+  functionName: "aifinPerBlock",
 });
 
 export const depositFarmingFunction = "deposit";

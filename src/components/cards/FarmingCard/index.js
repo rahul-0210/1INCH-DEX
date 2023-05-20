@@ -3,8 +3,7 @@ import { Collapse } from "reactstrap";
 import { utils } from "ethers";
 import { BigNumber } from "@ethersproject/bignumber";
 import { toast } from "react-toastify";
-import { useContractCall, useEthers } from "@usedapp/core";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useContractWrite, useContractRead } from "wagmi";
 
 import styles from "./FarmingCard.module.css";
 import notFound from "../../../assets/images/token-placeholder.png";
@@ -60,8 +59,8 @@ const FarmingCard = ({
   const [isStakeSelected, setIsStakeSelected] = useState(true);
   const [isRulesOpen, setRulesOpen] = useState(false);
   
-  const lpTokenDecimals = useContractCall(getTokenDecimals(LpTokenAbi, lpTokenAddress));
-  const amountInWei = inputAmount && utils.parseUnits(inputAmount.toString(), lpTokenDecimals?.[0]);
+  const {data: lpTokenDecimals = {}} = useContractRead(getTokenDecimals(LpTokenAbi, lpTokenAddress));
+  const amountInWei = inputAmount && utils.parseUnits(inputAmount.toString(), lpTokenDecimals);
   const farmingContractConfig = {
     address: farmingAddress,
     abi: MasterchefAbi,
@@ -75,7 +74,7 @@ const FarmingCard = ({
   const {write: harvest} = useContractWrite({
     ...farmingContractConfig,
     functionName: depositFarmingFunction,
-    args: [id, utils.parseUnits("0", lpTokenDecimals?.[0])]
+    args: [id, utils.parseUnits("0", lpTokenDecimals)]
   });
 
   const {write: withdraw} = useContractWrite({

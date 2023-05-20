@@ -1,47 +1,46 @@
-import { utils } from "ethers";
 
 export const lpName = (contractAddress, abi) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "name",
+  functionName: "name",
 });
 
 export const token0Address = (contractAddress, abi) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "token0",
+  functionName: "token0",
 });
 
 export const token1Address = (contractAddress, abi) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "token1",
+  functionName: "token1",
 });
 
 export const fetchTokenName = (contractAddress, abi) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "symbol",
+  functionName: "symbol",
 });
 
 export const fetchAllowance = (contractAddress, abi, userAddress, farmingContractAddress) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "allowance",
+  functionName: "allowance",
   args: [userAddress, farmingContractAddress],
 });
 
 export const fetchLiquidity = (abi, tokenAddress, lpTokenAddress) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: tokenAddress,
-  method: "balanceOf",
+  functionName: "balanceOf",
   args: [lpTokenAddress],
 });
 
 export const getTokenDecimals = (abi, contractAddress) => ({
-  abi: new utils.Interface(abi),
+  abi,
   address: contractAddress,
-  method: "decimals",
+  functionName: "decimals",
 });
 
 export const approveAllowanceFunction = "approve";

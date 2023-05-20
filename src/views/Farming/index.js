@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useContractCalls, useContractCall } from "@usedapp/core";
+import { useContractReads, useContractRead  } from "wagmi";
 import { utils } from "ethers";
 import { useSelector } from "react-redux";
 
@@ -30,7 +30,7 @@ const Farming = ({ configIndex, account, chainId }) => {
   const { CONTRACT, VALID_NETWORK } = CONTRACT_ADDRESS.FARMING[chainId][configIndex] ?? false;
   const { BLOCK_TIME } = CURRENT_CHAIN_BLOCK_TIME[chainId] ?? 0;
 
-  const [totalPoolLength] = useContractCalls(currentNetworkContract ? [poolLength(currentNetworkContract, FarmingAbi)] : []);
+  const {data: totalPoolLength = {}} = useContractRead(currentNetworkContract ? poolLength(currentNetworkContract, FarmingAbi) : {});
 
   const totalPoolLengthResolved = useContractValueTransformation({ totalPoolLength: totalPoolLength }, { totalPoolLength: (val) => parseFloat(val) });
 
@@ -44,7 +44,9 @@ const Farming = ({ configIndex, account, chainId }) => {
     return params;
   };
 
-  const allFarmInfo = useContractCalls(argsForPoolInfo(totalPoolLengthState, currentNetworkContract, currentNetworkAbi));
+  const {data: allFarmInfo = []} = useContractReads({
+    contracts: argsForPoolInfo(totalPoolLengthState, currentNetworkContract, currentNetworkAbi)
+  });
 
   const argsForUser = (length, contractAddress, abi, userAddress) => {
     let params = [];
@@ -56,7 +58,9 @@ const Farming = ({ configIndex, account, chainId }) => {
     return params;
   };
 
-  const userInfoValue = useContractCalls(argsForUser(totalPoolLengthState, currentNetworkContract, currentNetworkAbi, account));
+  const {data: userInfoValue = []} = useContractReads({
+    contracts: argsForUser(totalPoolLengthState, currentNetworkContract, currentNetworkAbi, account)
+  });
 
   const argsForReward = (length, contractAddress, abi, userAddress) => {
     let params = [];
@@ -68,9 +72,11 @@ const Farming = ({ configIndex, account, chainId }) => {
     return params;
   };
 
-  const pendingRewardsValue = useContractCalls(argsForReward(totalPoolLengthState, currentNetworkContract, currentNetworkAbi, account));
+  const {data: pendingRewardsValue = []} = useContractReads({
+    contracts: argsForReward(totalPoolLengthState, currentNetworkContract, currentNetworkAbi, account)
+  });
 
-  const rewardPerBlock = useContractCall(tokenPerBlock(currentNetworkContract, currentNetworkAbi));
+  const {data: rewardPerBlock = {}} = useContractRead(tokenPerBlock(currentNetworkContract, currentNetworkAbi));
 
   const argsForWalletBalance = (length, contractAddress, abi, userAddress) => {
     let params = [];
@@ -82,7 +88,9 @@ const Farming = ({ configIndex, account, chainId }) => {
     return params;
   };
 
-  const walletBalanceValue = useContractCalls(argsForWalletBalance(totalPoolLengthState, currentNetworkContract, TokenAbi, account));
+  const {data: walletBalanceValue = []} = useContractReads({
+    contracts: argsForWalletBalance(totalPoolLengthState, currentNetworkContract, TokenAbi, account)
+  });
 
   const argsForLpName = (length, contractAddress, abi) => {
     let params = [];
@@ -94,8 +102,10 @@ const Farming = ({ configIndex, account, chainId }) => {
     return params;
   };
 
-  const deployedFarmName = useContractCalls(argsForLpName(totalPoolLengthState, currentNetworkContract, LpTokenAbi));
-
+  const {data: deployedFarmName = []} = useContractReads({
+    contracts: argsForLpName(totalPoolLengthState, currentNetworkContract, LpTokenAbi)
+  });
+  
   const argsForToken0 = (length, contractAddress, abi) => {
     let params = [];
     if (contractAddress) {
@@ -106,7 +116,10 @@ const Farming = ({ configIndex, account, chainId }) => {
     return params;
   };
 
-  const listOfToken0 = useContractCalls(argsForToken0(totalPoolLengthState, currentNetworkContract, LpTokenAbi));
+  const {data: listOfToken0 = []} = useContractReads({
+    contracts: argsForToken0(totalPoolLengthState, currentNetworkContract, LpTokenAbi)
+  });
+
 
   const argsForToken1 = (length, contractAddress, abi) => {
     let params = [];
@@ -118,7 +131,9 @@ const Farming = ({ configIndex, account, chainId }) => {
     return params;
   };
 
-  const listOfToken1 = useContractCalls(argsForToken1(totalPoolLengthState, currentNetworkContract, LpTokenAbi));
+  const {data: listOfToken1 = []} = useContractReads({
+    contracts: argsForToken1(totalPoolLengthState, currentNetworkContract, LpTokenAbi)
+  });
 
   const argsForAllowance = (length, contractAddress, abi, userAddress) => {
     let params = [];
@@ -130,47 +145,57 @@ const Farming = ({ configIndex, account, chainId }) => {
     return params;
   };
 
-  const allowanceValue = useContractCalls(argsForAllowance(totalPoolLengthState, currentNetworkContract, LpTokenAbi, account));
+  const {data: allowanceValue = []} = useContractReads({
+    contracts: argsForAllowance(totalPoolLengthState, currentNetworkContract, LpTokenAbi, account)
+  });
 
   const argsForNameOfToken0 = (length, contractAddress, abi) => {
     let params = [];
     if (contractAddress) {
       for (let i = 0; i < length; i++) {
-        listOfToken0[i] && listOfToken0[i][0] && params.push(fetchTokenName(listOfToken0[i][0], abi));
+          listOfToken0[i] && params.push(fetchTokenName(listOfToken0[i], abi));
       }
     }
     return params;
   };
 
-  const token0Symbol = useContractCalls(argsForNameOfToken0(totalPoolLengthState, currentNetworkContract, LpTokenAbi));
+  const {data: token0Symbol = []} = useContractReads({
+    contracts: argsForNameOfToken0(totalPoolLengthState, currentNetworkContract, LpTokenAbi)
+  });
 
   const argsForNameOfToken1 = (length, contractAddress, abi) => {
     let params = [];
     if (contractAddress) {
       for (let i = 0; i < length; i++) {
-        listOfToken1[i] && listOfToken1[i][0] && params.push(fetchTokenName(listOfToken1[i][0], abi));
+        listOfToken1[i] && params.push(fetchTokenName(listOfToken1[i], abi));
       }
     }
     return params;
   };
 
-  const token1Symbol = useContractCalls(argsForNameOfToken1(totalPoolLengthState, currentNetworkContract, LpTokenAbi));
+  const {data: token1Symbol = []} = useContractReads({
+    contracts: argsForNameOfToken1(totalPoolLengthState, currentNetworkContract, LpTokenAbi)
+  });
 
   const argsForLiquidity = (length, contractAddress, abi, list) => {
     let params = [];
     if (contractAddress) {
       for (let i = 0; i < length; i++) {
-        allFarmInfo[i] && allFarmInfo[i].lpToken && list[i] && list[i][0] && params.push(fetchLiquidity(abi, list[i][0], allFarmInfo[i].lpToken));
+        allFarmInfo[i] && allFarmInfo[i].lpToken && list[i] && params.push(fetchLiquidity(abi, list[i], allFarmInfo[i].lpToken));
       }
     }
     return params;
   };
 
-  const token0Liquidity = useContractCalls(argsForLiquidity(totalPoolLengthState, currentNetworkContract, LpTokenAbi, listOfToken0));
+  const {data: token0Liquidity = []} = useContractReads({
+    contracts: argsForLiquidity(totalPoolLengthState, currentNetworkContract, LpTokenAbi, listOfToken0)
+  });
 
-  const token1Liquidity = useContractCalls(argsForLiquidity(totalPoolLengthState, currentNetworkContract, LpTokenAbi, listOfToken1));
+  const {data: token1Liquidity = []} = useContractReads({
+    contracts: argsForLiquidity(totalPoolLengthState, currentNetworkContract, LpTokenAbi, listOfToken1)
+  });
 
-  const totalAllocPointValue = useContractCalls(currentNetworkContract ? [totalAllocPoint(currentNetworkContract, currentNetworkAbi)] : []);
+  const {data: totalAllocPointValue = {}} = useContractRead(currentNetworkContract ? totalAllocPoint(currentNetworkContract, currentNetworkAbi) : {});
 
   const createFarms = () => {
     let newFarms = [];
@@ -178,19 +203,19 @@ const Farming = ({ configIndex, account, chainId }) => {
       for (let i = 0; i < totalPoolLengthState; i++) {
         newFarms.push({
           id: i,
-          earned: pendingRewardsValue[i] && pendingRewardsValue[i][0] && parseFloat(utils.formatUnits(pendingRewardsValue[i][0]._hex)).toFixed(3),
+          earned: pendingRewardsValue[i] && parseFloat(utils.formatUnits(pendingRewardsValue[i]._hex)).toFixed(3),
           mulitplier: allFarmInfo[i] && allFarmInfo[i].allocPoint && parseFloat(allFarmInfo[i].allocPoint) / 100,
-          farmName: deployedFarmName && deployedFarmName.length > 0 && deployedFarmName[i] && deployedFarmName[i],
+          farmName: deployedFarmName && deployedFarmName.length > 0 && deployedFarmName[i],
           walletBalance: walletBalanceValue && walletBalanceValue[i] && utils.formatUnits(walletBalanceValue[i].toString()),
           stakedValue: userInfoValue && userInfoValue[i] && userInfoValue[i].amount && utils.formatUnits(userInfoValue[i].amount.toString()),
           token0: listOfToken0 && listOfToken0[i] ? listOfToken0[i] : "",
           token1: listOfToken1 && listOfToken1[i] ? listOfToken1[i] : "",
-          token0Name: token0Symbol && token0Symbol[i] && token0Symbol[i][0],
-          token1Name: token1Symbol && token1Symbol[i] && token1Symbol[i][0],
+          token0Name: token0Symbol && token0Symbol[i],
+          token1Name: token1Symbol && token1Symbol[i],
           allowedAllowance: allowanceValue && allowanceValue.length > 0 && allowanceValue[i],
-          stakeFee: allFarmInfo[i] && allFarmInfo[i] && parseFloat(allFarmInfo[i].depositFeeBP) / 100,
-          lpTokenAddress: allFarmInfo[i] && allFarmInfo[i] && allFarmInfo[i].lpToken,
-          allocPoint: allFarmInfo[i] && allFarmInfo[i] && [allFarmInfo[i].allocPoint],
+          stakeFee: allFarmInfo[i]  && parseFloat(allFarmInfo[i].depositFeeBP) / 100,
+          lpTokenAddress: allFarmInfo[i] && allFarmInfo[i].lpToken,
+          allocPoint: allFarmInfo[i]  && [allFarmInfo[i].allocPoint],
           farmingAddress: currentNetworkContract,
           totalAllocPoint: totalAllocPointValue,
           token0Liquidity: token0Liquidity && token0Liquidity[i],
@@ -235,7 +260,7 @@ const Farming = ({ configIndex, account, chainId }) => {
               tokenPriceData={tokenPriceData}
               tokenPrice={tokenPrice}
               currentBlockTime={currentBlockTime}
-              rewardPerBlock={rewardPerBlock && rewardPerBlock && utils.formatUnits(rewardPerBlock[0]._hex)}
+              rewardPerBlock={rewardPerBlock && rewardPerBlock && utils.formatUnits(rewardPerBlock?._hex)}
               buyUrl={CONTRACT_ADDRESS.FARMING[chainId][configIndex]?.BUY_URL}
               lockingPeriod={CONTRACT_ADDRESS.FARMING[chainId][configIndex]?.LOCKING_PERIOD}
               cardTitle={CONTRACT_ADDRESS.FARMING[chainId][configIndex]?.TITLE}

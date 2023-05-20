@@ -9,7 +9,6 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { configureChains, WagmiConfig, createClient } from "wagmi";
 import { publicProvider } from "wagmi/providers/public";
-import { Arbitrum, DAppProvider } from "@usedapp/core";
 import {
   arbitrum,
   arbitrumGoerli,
@@ -72,19 +71,10 @@ const client = createClient({
   connectors,
 });
 
-const config = {
-  readOnlyChainId: Arbitrum.chainId,
-  readOnlyUrls: {
-    [Arbitrum.chainId]: ARBITRUM_PROVIDER,
-  },
-  connectors,
-};
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ReduxProvider>
-      <DAppProvider config={config}>
         <WagmiConfig client={client}>
           <HashRouter>
             <RainbowKitProvider modalSize="compact" chains={chains}>
@@ -92,7 +82,6 @@ root.render(
             </RainbowKitProvider>
           </HashRouter>
         </WagmiConfig>
-      </DAppProvider>
     </ReduxProvider>
   </React.StrictMode>
 );
