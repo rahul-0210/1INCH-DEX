@@ -1,0 +1,32 @@
+.connectWalletCard {
+  margin: 5px;
+  padding: 1px;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  max-width: 400px;
+  min-height: 130px;
+  width: 400px;
+  box-shadow: 0px 4px 29px rgba(91, 70, 249, 0.3);
+  border-radius: 18px;
+  /* border: 1px double #D37CD3; */
+  font-size: 15px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.connectWalletCardContent {
+  background-color: #fff;
+}
+
+.infoValue {
+  margin: 10px;
+  font-size: 16px;
+  color: #1c1c8e;
+}
+
+@media screen and (max-width: 500px) {
+  .connectWalletCard {
+    width: 100%;
+  }
+}

@@ -1,5 +1,6 @@
 export const WHITELISTED_USERS = ["0xf1E9A0Bc6f8d7E350cf274F5B42c3a295D133d29", "0x7Ff38964ae5aC947FAfD86BaA44D347241ceE013", "0x48A1C4a492cc3D11Aa5E780aBC2e6dA4E04CC190"]
 export const RAINBOW_ID = process.env.REACT_APP_RAINBOW_ID;
+export const ARBITRUM_PROVIDER = "https://arb-mainnet.g.alchemy.com/v2/demo";
 export const REFERRER_ADDRESS = "0x48A1C4a492cc3D11Aa5E780aBC2e6dA4E04CC190";
 export const DEX_FEE = 2;
 export const BASE_URL = "https://api.1inch.io/v5.0/";

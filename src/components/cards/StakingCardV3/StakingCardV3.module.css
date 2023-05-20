@@ -1,0 +1,290 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap");
+/* #F6C843 */
+.stakingCard {
+  margin-bottom: 160px;
+  margin-top: 20px;
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+  max-width: 600px;
+  min-height: 480px;
+  border-radius: 18px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  font-size: 15px;
+  width: 483px;
+  background-color: #030b15;
+}
+.displayTokenName {
+  display: inline;
+  font-family: Montserrat;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0em;
+  color: #ffffff;
+}
+.hrTag {
+  margin: auto;
+  width: 428px;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.tokenInfo p {
+  font-family: Montserrat;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  align-items: center;
+  color: #ffffff;
+}
+.LogicContent {
+  position: relative;
+  width: auto;
+}
+.unStake {
+  display: none;
+}
+.stake {
+  display: none;
+}
+.flexRow {
+  display: flex;
+  flex-wrap: no-wrap;
+  font-size: 16px;
+  text-align: center;
+}
+
+.activeStakeFlex {
+  border-radius: 15px 15px;
+  background: linear-gradient(194deg, #9aeae6 12%, #716cdc 267%);
+  animation: gradient 3s ease infinite;
+  color: #fff;
+  padding: 14px;
+  flex: 50% 1;
+  z-index: 5;
+  cursor: pointer;
+  border-bottom: 0;
+}
+.stakeFlex {
+  border-radius: 15px;
+  background-color: #fff;
+  color: #9aeae6;
+  padding: 14px;
+  flex: 50%;
+  z-index: 5;
+  border-bottom-left-radius: 0px;
+  cursor: pointer;
+}
+.unstakeFlex {
+  border-radius: 15px;
+  background-color: #fff;
+  color: #1c1c8e;
+  padding: 14px;
+  border-bottom-right-radius: 0px;
+  flex: 50%;
+  z-index: 5;
+  cursor: pointer;
+}
+.activeUnstakeFlex {
+  border-radius: 15px;
+  color: #fff;
+  border-radius: 15px 15px;
+  border-bottom: 0;
+  background: linear-gradient(225deg, #9aeae6 12%, #716cdc 408%);
+  padding: 14px;
+  flex: 50% 1;
+  z-index: 5;
+  cursor: pointer;
+}
+.cardContent {
+  position: absolute;
+  top: 30px;
+  width: 100%;
+  min-height: 289px;
+  background: linear-gradient(194deg, #9aeae6, #716cdc 100%);
+  animation: gradient 3s ease infinite;
+  border-radius: 13px;
+  border: 1px solid #5b46f9;
+}
+.InputAmount {
+  width: 100%;
+  padding: 8px 24px;
+  border-radius: 19px;
+  border: 1px solid #5b46f9;
+}
+.MaxButton {
+  width: 95px;
+  padding: 8px 24px 8px 24px;
+  color: #ffffff;
+  background: #5b46f9;
+  border: 1px solid #1c1c8e;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 30px;
+}
+.WithdrawBTN {
+  color: #ffff;
+  background: #5b46f9;
+  width: 100%;
+  align-items: center;
+  padding: 7px 24px;
+  border: 1px solid #1c1c8e;
+  box-sizing: border-box;
+  border-radius: 30px;
+}
+.userTokenInfo {
+  font-family: Montserrat;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #fff;
+}
+.HarvestBTN {
+  background: #f5be3a;
+  color: #ffffff;
+  font-weight: bold;
+  width: 100%;
+  align-items: center;
+  padding: 8px 24px;
+  border: 1px solid #f5be3a;
+  box-sizing: border-box;
+  border-radius: 30px;
+}
+.RulesBTN {
+  background-color: inherit;
+  color: #ffff;
+  border: 0px;
+  align-items: center;
+  text-align: center;
+  line-height: 20px;
+  padding: 5px;
+  cursor: pointer;
+}
+/* .RulesBTN:hover {
+  color: #1c1c8e;
+} */
+
+.DepositeBTN {
+  background: #f5be3a;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  width: 100%;
+  align-items: center;
+  padding: 8px 24px;
+  box-sizing: border-box;
+  border-radius: 30px;
+}
+
+.BuyforwardBTN {
+  background: #ffffff;
+  box-shadow: 0px 0px 5px rgba(1, 224, 170, 0.78);
+  border: 1px solid #ffffff;
+  border-radius: 30px;
+  align-items: center;
+  padding: 8px 24px;
+  box-sizing: border-box;
+  color: #1c1c8e;
+  width: 100%;
+}
+
+.subHeaderLight {
+  color: #ffff;
+  font-weight: bold;
+}
+
+div.pills {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+div.pills > div button {
+  color: #fff;
+  margin: 5px;
+  padding: 5px 8px;
+  background: #5b46f9;
+  border: 2px solid #fff;
+  border-radius: 20px;
+  text-decoration: none;
+  min-width: 20px;
+}
+.activePill:focus {
+  border: 1px solid #007bff;
+  color: #fff;
+  background-color: #007bff;
+}
+.disabledPill {
+  background-color: #d8d8d8a8 !important;
+  color: #1c1c8e !important;
+  border: 2px solid #1c1c8e !important;
+}
+@media screen and (max-width: 480px) {
+  .tokenInfo p {
+    font-size: 15px;
+  }
+}
+@media screen and (max-width: 450px) {
+  .tokenInfo p {
+    font-size: 13px;
+  }
+  .MaxButton {
+    font-size: 13px;
+    width: auto;
+  }
+  div.pills {
+    font-size: 13px;
+    justify-content: start;
+    margin: auto;
+  }
+}
+@media screen and (max-width: 320px) {
+  .tokenInfo p {
+    font-size: 13px;
+  }
+  .MaxButton {
+    font-size: 10px;
+    width: auto;
+  }
+}
+@media screen and (max-width: 280px) {
+  .MaxButton {
+    font-size: 10px;
+    width: auto;
+    padding: 10px 14px;
+  }
+  .tokenInfo p {
+    font-size: 11px;
+  }
+  .RulesBTN {
+    font-size: 13px;
+  }
+  .BuyforwardBTN {
+    font-size: 10px;
+  }
+  .DepositeBTN {
+    font-size: 11px;
+  }
+  div.pills {
+    font-size: 14px;
+    justify-content: start;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

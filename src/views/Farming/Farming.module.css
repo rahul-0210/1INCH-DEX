@@ -1,0 +1,7 @@
+.viewContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  min-height: calc(100vh - 170px);
+  align-items: flex-start;
+}

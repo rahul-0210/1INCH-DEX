@@ -1,0 +1,25 @@
+.tokenPairWrapper {
+  position: relative;
+  height: 65px;
+  width: 75px;
+  display: inline-block;
+  margin: 5px;
+}
+
+.icon1 {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.icon2 {
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+}

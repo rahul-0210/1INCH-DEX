@@ -1,0 +1,67 @@
+div.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 50px;
+}
+div.material {
+  position: relative;
+}
+label.label {
+  position: absolute;
+  font-size: 16px;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  background-color: white;
+  color: grey;
+  padding: 0 5px;
+  margin: 0 8px;
+  transition: 0.1s ease-out;
+  transform-origin: left top;
+}
+input.input {
+  font-size: 1rem;
+  outline: none;
+  border: 1px solid grey;
+  border-radius: 5px;
+  padding: 1rem 0.7rem;
+  color: gray;
+  transition: 0.1s ease-out;
+}
+input.input2 {
+  color: red;
+  transition: 0.1s ease-out;
+  border: 1px solid red;
+  border-radius: 5px;
+  padding: 1rem 0.7rem;
+}
+input.input3 {
+  background-color: #ebebe4;
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+input.input:focus {
+  border-color: #05e2b7;
+}
+input.input:focus + .label {
+  color: #05e2b7;
+  top: 0;
+  transform: translateY(-50%) scale(0.9);
+}
+input.input:not(:placeholder-shown) + .label {
+  transform: translateY(-50%) scale(0.9);
+}
+
+input.input2:focus {
+  border-color: red;
+}
+input.input2:focus + .label {
+  color: red;
+  top: 0;
+  transform: translateY(-50%) scale(0.9);
+}
+input.input2:not(:placeholder-shown) + .label {
+  transform: translateY(-50%) scale(0.9);
+}

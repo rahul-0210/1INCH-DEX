@@ -1,0 +1,84 @@
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  background-color: #211f20;
+  display: flex;
+  flex-direction: column;
+  max-width: 40%;
+  padding: 22px 30px;
+  border-radius: 20px;
+}
+
+.modalHeader {
+  background-color: #fff;
+  color: #211f20;
+  /* border: 1px solid #211f20; */
+  border-bottom: none;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.4rem;
+}
+
+.modalBody {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background-color: #211f20;
+  background: linear-gradient(194deg, #9aeae6, #716cdc 100%);
+}
+.bodyContainer {
+  background-color: #211f20;
+  color: #fff;
+}
+
+div.networkCard {
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  background-color: #080808 !important;
+  color: #fff;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 10px;
+}
+
+div.active {
+  padding: 9px 10px;
+  display: flex;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  text-align: center;
+  cursor: pointer;
+  color: #fff;
+  gap: 10px;
+  align-items: center;
+  /* border: 1px solid #fff; */
+  box-shadow: inset 0px 0px 4px #fff;
+}
+
+.modalWrapper {
+  border-radius: 15px;
+  overflow: hidden;
+}
+div.name {
+  font-weight: 500;
+  flex-grow: 1;
+  text-align: left;
+}
+.networkIcon {
+  border-radius: 20px;
+  width: 35px;
+  height: 35px;
+  padding: 10px;
+  margin: auto;
+}

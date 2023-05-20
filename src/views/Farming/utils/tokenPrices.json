@@ -1,0 +1,24 @@
+[
+  {
+    "name": "usdt",
+    "symbol": "USDT",
+    "code": "USDT",
+    "tokenProd": "0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9",
+    "decimals": 6,
+    "fallbackPrice": 1,
+    "icon": "https://lcw.nyc3.cdn.digitaloceanspaces.com/production/currencies/64/usdt.webp",
+    "value": 1,
+    "chainId": 42161
+  },
+  {
+    "name": "aifin",
+    "symbol": "AIFIN",
+    "code": "AIFIN",
+    "tokenProd": "0xbE8bAD7FEdB9a012295CBC2f018994dC43b32A24",
+    "decimals": 18,
+    "fallbackPrice": 0.001389,
+    "icon": "https://lcw.nyc3.cdn.digitaloceanspaces.com/production/currencies/64/aifin.webp",
+    "value": 1,
+    "chainId": 42161
+  }
+]

@@ -1,0 +1,15 @@
+/* .viewContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  min-height: calc(100vh - 70px);
+  align-items: flex-start;
+} */
+
+.viewContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  min-height: calc(100vh - 70px);
+  align-items: flex-start;
+}

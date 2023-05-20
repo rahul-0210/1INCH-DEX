@@ -1,0 +1,24 @@
+div.infoText {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+div.inputSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+div.inputSection > input.input {
+  box-shadow: none;
+}
+span.percentage {
+  color: #007bff;
+}
+
+div.buttonSection {
+  text-align: center;
+}

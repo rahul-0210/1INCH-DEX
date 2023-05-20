@@ -10,14 +10,17 @@ function Header() {
       <div className="leftH">
         <img src={Logo} alt="logo" width={120} />
       </div>
-      {/* <div className="d-flex">
+      <div className="d-flex">
         <Link to="/" className="link">
           <div className="headerItem">Swap</div>
         </Link>
-        <Link to="/tokens" className="link">
-          <div className="headerItem">Tokens</div>
+        <Link to="/stake" className="link">
+          <div className="headerItem">Stake</div>
         </Link>
-      </div> */}
+        <Link to="/farm" className="link">
+          <div className="headerItem">Farm</div>
+        </Link>
+      </div>
       <div className="rightH">
         <ConnectButton
           accountStatus={{

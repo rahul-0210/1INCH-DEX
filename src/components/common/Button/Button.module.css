@@ -1,0 +1,108 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans&display=swap");
+
+:root {
+  --warning: #ebebeb;
+  /* --fontcolor: #1866ed; */
+  /* --backGroundImage: linear-gradient(#f2f5fa, #f2f5fa), radial-gradient(circle at top right, #1866ed 4.02%, #c1d7fc 97.87%); */
+  --buttonBorder: 1px double var(--fontcolor);
+  --buttonFontWeight: 600;
+  /* --gradientbutton: linear-gradient(90deg, #04e762, #89fc00); */
+}
+
+.btn1 {
+  font-family: "DM Sans", sans-serif;
+  cursor: pointer;
+}
+
+.normalBtn {
+  min-width: 80px;
+}
+.mediumBtn {
+  width: 90px;
+  height: 48px;
+}
+.largeBtn {
+  width: 100%;
+}
+
+/* Button style 1 */
+button.btnStyle {
+  /* color: black; */
+  background: transparent;
+  border: 1px solid #4058b9;
+  border-radius: 10px;
+  font-weight: var(--buttonFontWeight);
+}
+button.btnStyle:hover {
+  background-color: #4058b9;
+  border-color: #4058b9;
+}
+button.btnStyle:focus {
+  background-color: #4058b9;
+  box-shadow: none;
+  opacity: 0.8;
+}
+button.btnStyle:focus:active {
+  box-shadow: none;
+}
+/* Button style 2 */
+button.btnStyle2 {
+  /* opacity: 0.5; */
+  /* background: var(--gradientbutton); */
+  background-color: #4058b9;
+  background: linear-gradient(160deg, rgba(0, 196, 244, 1) 25%, rgb(18, 57, 102) 49%, rgba(0, 196, 244, 1) 100%);
+  font-weight: var(--buttonFontWeight);
+  border: 1px solid transparent;
+  border-radius: 10px;
+}
+button.btnStyle2:hover {
+  opacity: 0.9;
+  /* border-color: var(--gradientbutton); */
+  border-color: #4058b9;
+  background-color: #4058b9;
+}
+button.btnStyle2:focus {
+  background-color: #4058b9;
+  box-shadow: none;
+  opacity: 0.8;
+}
+button.btnStyle2:focus:active {
+  box-shadow: none;
+}
+
+/* Button style 3 */
+button.btnStyle3 {
+  background: #efefef;
+  color: black;
+  /* border: 1px solid transparent; */
+  border-radius: 10px;
+  width: 100%;
+}
+button.btnStyle3:hover {
+  opacity: 0.5;
+  background: #efefef;
+  color: black;
+}
+button.btnStyle3:focus {
+  background-color: #efefef;
+  box-shadow: none;
+  opacity: 0.8;
+  color: black;
+}
+button.btnStyle3:focus:active {
+  box-shadow: none;
+}
+/* Button style 4 */
+button.btnStyle4 {
+  background: rgba(23, 199, 167, 0.1);
+  color: #17c7a7;
+  border: 1px solid #17c7a7;
+  font-weight: 700;
+  border-radius: 5px;
+}
+/* Button style 5
+button.btnStyle5:hover {
+  opacity: 0.3;
+  background: #efefef;
+  color: black;
+} */

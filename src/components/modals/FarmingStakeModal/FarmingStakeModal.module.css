@@ -1,0 +1,56 @@
+div.infoText {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+div.inputSection {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+div.inputSection > input.input {
+  box-shadow: none;
+}
+span.percentage {
+  color: #007bff;
+}
+
+/* css for pills starts here */
+div.pills {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 400px) {
+  div.pills {
+    justify-content: flex-start;
+  }
+}
+
+div.pills > div button {
+  color: #03031999;
+  margin: 5px;
+  padding: 5px 8px;
+  background: #fff;
+  border: 1px solid #aaa;
+  border-radius: 20px;
+  text-decoration: none;
+  min-width: 50px;
+}
+
+div.pills > div button:focus {
+  border: 1px solid #007bff;
+  color: #fff;
+  background-color: #007bff;
+}
+/* --------- */
+
+div.buttonSection {
+  text-align: center;
+}
