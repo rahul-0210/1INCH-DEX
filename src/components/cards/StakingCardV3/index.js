@@ -58,7 +58,7 @@ function StakingCardV3({
 
   return (
     <>
-      <div className={styles.stakingCard + " card"}>
+      <div className={styles.stakingCard + " card mx-2"}>
         <div className="container">
           <div className="row">
             <div className="col-12 mt-2">

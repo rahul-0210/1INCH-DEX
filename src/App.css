@@ -90,7 +90,7 @@ header {
 .tradeBox {
   width: 450px;
   background-color: #fff;
-  border: 2px solid #94b8f7;
+  /* border: 2px solid #94b8f7; */
   min-height: 300px;
   border-radius: 15px;
   display: flex;
@@ -99,6 +99,7 @@ header {
   align-items: flex-start;
   padding-left: 30px;
   padding-right: 30px;
+  box-shadow: 0 4px 8px -1px #94b8f7;
   /* border-width: 2px;
   border-style: solid;
   border-image: linear-gradient(#fff,#fff),radial-gradient(circle at top left,#1866ed 4.02%,#c1d7fc 97.87%) */

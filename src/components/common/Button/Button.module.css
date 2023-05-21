@@ -27,18 +27,18 @@
 
 /* Button style 1 */
 button.btnStyle {
-  /* color: black; */
+  color: #363e54;
   background: transparent;
-  border: 1px solid #4058b9;
+  border: 1px solid #65c4ff;
   border-radius: 10px;
   font-weight: var(--buttonFontWeight);
 }
 button.btnStyle:hover {
-  background-color: #4058b9;
-  border-color: #4058b9;
+  background: linear-gradient(90deg,#1866ed,#65c4ff);
+  border: 1px solid #65c4ff;
 }
 button.btnStyle:focus {
-  background-color: #4058b9;
+  background-color: linear-gradient(90deg,#1866ed,#65c4ff);
   box-shadow: none;
   opacity: 0.8;
 }

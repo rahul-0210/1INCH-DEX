@@ -9,6 +9,7 @@ body {
   width: 100vw;
   background-color: #f2f5fa;
   color: white;
+  overflow-x: hidden;
 }
 
 code {
@@ -117,3 +118,7 @@ code {
   font-weight: 500;
   border-color: #1f2639 !important;
 } */
+
+.modal-header {
+  color: #363e54 !important;
+}

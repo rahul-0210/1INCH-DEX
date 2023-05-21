@@ -9,10 +9,11 @@
   max-width: 600px;
   min-height: 480px;
   border-radius: 18px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   font-size: 15px;
   width: 483px;
-  background-color: #030b15;
+  border: none;
+  box-shadow: 0 4px 8px -1px #94b8f7;
+  background-color: #fff;
 }
 .displayTokenName {
   display: inline;
@@ -22,13 +23,13 @@
   font-weight: 700;
   line-height: 20px;
   letter-spacing: 0em;
-  color: #ffffff;
+  color: #363e54;
 }
 .hrTag {
   margin: auto;
   width: 428px;
-  border: 1px solid #e5e5e5;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border: 1px solid #94b8f7;
+  box-shadow: 0 4px 8px -4px #94b8f7;
 }
 .tokenInfo p {
   font-family: Montserrat;
@@ -37,7 +38,7 @@
   font-size: 16px;
   line-height: 20px;
   align-items: center;
-  color: #ffffff;
+  color: #363e54;
 }
 .LogicContent {
   position: relative;
@@ -58,7 +59,7 @@
 
 .activeStakeFlex {
   border-radius: 15px 15px;
-  background: linear-gradient(194deg, #9aeae6 12%, #716cdc 267%);
+  background: #1866ed;
   animation: gradient 3s ease infinite;
   color: #fff;
   padding: 14px;
@@ -70,7 +71,7 @@
 .stakeFlex {
   border-radius: 15px;
   background-color: #fff;
-  color: #9aeae6;
+  color: #363e54;
   padding: 14px;
   flex: 50%;
   z-index: 5;
@@ -80,7 +81,7 @@
 .unstakeFlex {
   border-radius: 15px;
   background-color: #fff;
-  color: #1c1c8e;
+  color: #363e54;
   padding: 14px;
   border-bottom-right-radius: 0px;
   flex: 50%;
@@ -92,7 +93,7 @@
   color: #fff;
   border-radius: 15px 15px;
   border-bottom: 0;
-  background: linear-gradient(225deg, #9aeae6 12%, #716cdc 408%);
+  background: #1866ed;
   padding: 14px;
   flex: 50% 1;
   z-index: 5;
@@ -103,26 +104,29 @@
   top: 30px;
   width: 100%;
   min-height: 289px;
-  background: linear-gradient(194deg, #9aeae6, #716cdc 100%);
+  background: linear-gradient(183deg,#1866ed 10%,#65c4ff);
   animation: gradient 3s ease infinite;
   border-radius: 13px;
-  border: 1px solid #5b46f9;
+  box-shadow: 0 4px 8px -1px #94b8f7;
 }
 .InputAmount {
   width: 100%;
   padding: 8px 24px;
   border-radius: 19px;
-  border: 1px solid #5b46f9;
+  border: none;
 }
 .MaxButton {
   width: 95px;
   padding: 8px 24px 8px 24px;
   color: #ffffff;
   background: #5b46f9;
-  border: 1px solid #1c1c8e;
+  border: none;
   box-sizing: border-box;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 30px;
+}
+.MaxButton:hover {
+  box-shadow: none;
 }
 .WithdrawBTN {
   color: #ffff;
@@ -130,7 +134,7 @@
   width: 100%;
   align-items: center;
   padding: 7px 24px;
-  border: 1px solid #1c1c8e;
+  border: none;
   box-sizing: border-box;
   border-radius: 30px;
 }
