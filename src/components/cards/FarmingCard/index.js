@@ -74,8 +74,9 @@ const FarmingCard = ({
   const {write: harvest} = useContractWrite({
     ...farmingContractConfig,
     functionName: depositFarmingFunction,
-    args: [id, utils.parseUnits("0", lpTokenDecimals)]
+    args: [id, "0"]
   });
+  // utils.parseUnits("0", lpTokenDecimals);
 
   const {write: withdraw} = useContractWrite({
     ...farmingContractConfig,
@@ -286,8 +287,8 @@ const FarmingCard = ({
                             message={"Are you sure you want to claim pending tokens?"}
                             style={{ margin: "5px", minWidth: "100px" }}
                             onConfirm={() => {
+                              harvest();
                               if (Number(earned) !== 0) {
-                                harvest();
                               } else {
                                 toast.error("Pending Amount is Null");
                               }

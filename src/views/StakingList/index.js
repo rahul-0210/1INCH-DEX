@@ -28,7 +28,7 @@ const StakingList = ({account, chainId}) => {
           );
         })
       ) : (
-        <NetworkError chainId={chainId} />
+        <NetworkError />
       )}
     </div>
   );

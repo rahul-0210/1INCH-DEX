@@ -36,7 +36,7 @@ const StakingV3 = ({
 }) => {
   const [inputAmount, setInputAmount] = useState("");
   const amountInWei = inputAmount && utils.parseUnits(inputAmount, 18);
-
+  
   const stakingContractConfig = {
     address: stakingContractAddress,
     abi: StakingAbi,
@@ -59,7 +59,7 @@ const StakingV3 = ({
     args: [amountInWei],
   });
 
-  const { data: contractData } = useContractReads({
+  const { data: contractData = [] } = useContractReads({
     contracts: [
       getPendingDivsContractCall(stakingContractAddress, account),
       depositedTokenContractCall(stakingContractAddress, account),
@@ -71,8 +71,8 @@ const StakingV3 = ({
       getPoolSize(stakingContractAddress),
       stakingFeeRate(stakingContractAddress),
       unstakingFeeRate(stakingContractAddress),
-  ],
-})
+    ],
+  })
 
   const displayState = useContractValueTransformation(
     {
@@ -112,36 +112,38 @@ const StakingV3 = ({
       abi: erc20ABI,
     }
 
-    const {data: {value: tokenBalance = {}}} = useBalance({
-      address: account,
-      token: displayState?.depositTokenAddress,
-    })
-
-    const {data: {value: contractBalance = {}}} = useBalance({
-      address: stakingContractAddress,
-      token: displayState?.depositTokenAddress,
-    })
-
-    const { data: tokenAllowance = {} } = useContractRead({
-      ...tokenContractConfig,
-      functionName: 'allowance',
-      args: [account, stakingContractAddress]
+    const { data: tokenData = [] } = useContractReads({
+      contracts: [
+        {
+          ...tokenContractConfig,
+          functionName: 'balanceOf',
+          args: [account]
+        },
+        {
+          ...tokenContractConfig,
+          functionName: 'balanceOf',
+          args: [stakingContractAddress]
+        },
+        {
+          ...tokenContractConfig,
+          functionName: 'allowance',
+          args: [account, stakingContractAddress]
+        },
+      ],
     })
     
   const tokenDisplayState = useContractValueTransformation(
     {
-      balance: tokenBalance,
-      allowance: tokenAllowance,
-      contractBalance: contractBalance,
+      balance: tokenData?.[0],
+      contractBalance: tokenData?.[1],
+      allowance: tokenData?.[2]
     },
     {
-      balance: (val) =>
-        val ? Number(utils.formatUnits(val, 18)).toFixed(3) : 0,
+      balance: (val) => val ? Number(utils.formatUnits(val, 18)).toFixed(3) : 0,
+      contractBalance: (val) => val ? Number(utils.formatUnits(val, 18)).toFixed(3) : 0,
       allowance: (val) => (val ? utils.formatUnits(val, 18) : 0),
-      contractBalance: (val) =>
-        val ? Number(utils.formatUnits(val, 18)).toFixed(3) : 0,
     }
-  );
+    );
 
   const { write: approve } = useContractWrite({
     ...tokenContractConfig,
