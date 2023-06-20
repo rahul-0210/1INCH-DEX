@@ -7,6 +7,7 @@ import { useAccount, useNetwork } from "wagmi";
 import StakingList from "./views/StakingList";
 import FarmingList from "./views/FarmingList";
 import ConnectWallet from "./components/ConnectWallet";
+import ComingSoon from "./components/ComingSoon";
 
 function App() {
   const { address, isConnected } = useAccount();
@@ -45,11 +46,13 @@ function App() {
             />
             <Route
               path="/stake"
-              element={<StakingList account={address} chainId={chain?.id} />}
+              element={<ComingSoon />}
+              // element={<StakingList account={address} chainId={chain?.id} />}
             />
             <Route
               path="/farm"
-              element={<FarmingList account={address} chainId={chain?.id} />}
+              element={<ComingSoon />}
+              // element={<FarmingList account={address} chainId={chain?.id} />}
             />
           </Routes>
         )}

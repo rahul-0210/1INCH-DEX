@@ -58,6 +58,12 @@ header {
   cursor: pointer;
 }
 
+.headerItemActive {
+  color: #fff;
+  background: linear-gradient(90deg,#1866ed,#65c4ff);
+  cursor: pointer;
+}
+
 .connectButton {
   /* background-color: #243056;  */
   padding: 10px;
